@@ -1,10 +1,11 @@
-# FileSecureSuite v1.0
+# FileSecureSuite v1.0.2
 
 Enterprise-grade file encryption with AES-256-GCM and RSA-4096.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.2-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
+![Status](https://img.shields.io/badge/status-stable-green.svg)
 
 ---
 
@@ -16,6 +17,18 @@ Enterprise-grade file encryption with AES-256-GCM and RSA-4096.
 - **Secure Key Derivation** - PBKDF2 with configurable iterations
 - **Interactive CLI** - User-friendly terminal interface with progress bars
 - **HMAC Verification** - Integrity checking for all encrypted data
+- **Multi-Environment Support** - Works on Desktop, Headless, Remote Desktop
+
+---
+
+## What's New in v1.0.2
+
+✅ **Fixed f-string syntax error** - Python 3.6+ compatibility  
+✅ **Fixed QR code viewer** - Now works on Linux/macOS with eog and xdg-open  
+✅ **Improved cross-platform support** - Better handling on Remote Desktop environments  
+✅ **Enhanced error handling** - Better fallback for missing image viewers  
+
+[See full changelog](CHANGELOG.md)
 
 ---
 
@@ -26,11 +39,11 @@ Enterprise-grade file encryption with AES-256-GCM and RSA-4096.
 ```bash
 # Windows
 python -m pip install -r requirements.txt
-python FileSecureSuite_1_0_0.py
+python FileSecureSuite_1_0_2.py
 
 # macOS / Linux
 python3 -m pip install -r requirements.txt
-python3 FileSecureSuite_1_0_0.py
+python3 FileSecureSuite_1_0_2.py
 ```
 
 ### Automated Installers
@@ -74,7 +87,7 @@ All automatically installed:
 Launch the application:
 
 ```bash
-python3 FileSecureSuite_1_0_0.py
+python3 FileSecureSuite_1_0_2.py
 ```
 
 ### Main Features
@@ -84,6 +97,20 @@ python3 FileSecureSuite_1_0_0.py
 3. **Text Encryption** - Encrypt/decrypt text directly
 4. **Generate Keys** - Create RSA-4096 key pairs
 5. **Manage Keys** - Import/export encryption keys
+6. **View Audit Logs** - Track encryption operations
+7. **Lightning Network Donations** - Support development via QR code
+
+---
+
+## Platform Support
+
+| Platform | Status | Notes |
+|----------|--------|-------|
+| Windows 10/11 | ✅ Full Support | Native QR viewer |
+| Linux Desktop | ✅ Full Support | Requires eog or xdg-open |
+| macOS | ✅ Full Support | Uses Preview app |
+| Kali Linux (Headless) | ✅ Full Support | Shows file path |
+| Remote Desktop | ✅ Full Support | Auto-detects environment |
 
 ---
 
@@ -94,6 +121,7 @@ python3 FileSecureSuite_1_0_0.py
 - Secure random salt generation
 - File permissions restricted to owner only
 - HMAC-based integrity verification
+- Cross-platform compatibility tested
 
 ---
 
@@ -132,6 +160,15 @@ python -m pip install cryptography  # Windows
 python3 -m pip install cryptography  # Linux/macOS
 ```
 
+### QR Code Not Displaying (Linux)
+```bash
+# Install eog for better QR code viewing
+sudo apt install eog
+
+# Or use xdg-open (usually pre-installed)
+xdg-open qrcode/lightning_qrcode.png
+```
+
 ---
 
 ## Contributing
@@ -150,7 +187,9 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 - **Issues:** https://github.com/yourusername/FileSecureSuite/issues
 - **Discussions:** https://github.com/yourusername/FileSecureSuite/discussions
+- **Changelog:** [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
-**FileSecureSuite v1.0** - Enterprise encryption for everyone
+**FileSecureSuite v1.0.2** - Enterprise encryption for everyone  
+*Last Updated: 2025-11-14*
