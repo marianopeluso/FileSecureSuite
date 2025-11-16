@@ -1,8 +1,8 @@
-# FileSecureSuite v1.0.2
+# FileSecureSuite v1.0.3
 
 Enterprise-grade file encryption with AES-256-GCM and RSA-4096.
 
-![Version](https://img.shields.io/badge/version-1.0.2-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
 ![Status](https://img.shields.io/badge/status-stable-green.svg)
@@ -21,12 +21,12 @@ Enterprise-grade file encryption with AES-256-GCM and RSA-4096.
 
 ---
 
-## What's New in v1.0.2
+## What's New in v1.0.3
 
-✅ **Fixed f-string syntax error** - Python 3.6+ compatibility  
-✅ **Fixed QR code viewer** - Now works on Linux/macOS with eog and xdg-open  
-✅ **Improved cross-platform support** - Better handling on Remote Desktop environments  
-✅ **Enhanced error handling** - Better fallback for missing image viewers  
+✅ **QR Code Display Overhaul** - Now displays as ASCII art in terminal  
+✅ **Improved Navigation** - Unified menu system with consistent flow  
+✅ **Removed File I/O** - No more .qrcode directory creation  
+✅ **Cross-Platform Optimized** - Better terminal compatibility  
 
 [See full changelog](CHANGELOG.md)
 
@@ -92,12 +92,13 @@ python3 FileSecureSuite_1_0_2.py
 
 ### Main Features
 
-1. **Generate Keys** - Create RSA-4096 key pairs
-2. **Encrypt Text or Files** - Secure files with AES-256-GCM or RSA-4096
-3. **Decrypt Files** - Restore encrypted files
-4. **Decrypt Text** - Restore encrypted text
-5. **View Audit Logs** - Track encryption operations
-6. **Lightning Network Donations** - Support development via QR code
+1. **Encrypt Files** - Secure files with AES-256-GCM
+2. **Decrypt Files** - Restore encrypted files
+3. **Text Encryption** - Encrypt/decrypt text directly
+4. **Generate Keys** - Create RSA-4096 key pairs
+5. **Manage Keys** - Import/export encryption keys
+6. **View Audit Logs** - Track encryption operations
+7. **Lightning Network Donations** - Support development via QR code
 
 ---
 
@@ -170,6 +171,12 @@ xdg-open qrcode/lightning_qrcode.png
 
 ---
 
+## Contributing
+
+Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+---
+
 ## License
 
 This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
@@ -184,5 +191,5 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 ---
 
-**FileSecureSuite v1.0.2** - Enterprise encryption for everyone  
-*Last Updated: 2025-11-14*
+**FileSecureSuite v1.0.3** - Enterprise encryption for everyone  
+*Last Updated: 2025-11-16*
