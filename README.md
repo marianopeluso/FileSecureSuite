@@ -278,8 +278,8 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 ## Support
 
-- **Issues:** https://github.com/yourusername/FileSecureSuite/issues
-- **Discussions:** https://github.com/yourusername/FileSecureSuite/discussions
+- **Issues:** https://github.com/marianopeluso/FileSecureSuite/issues
+- **Discussions:** https://github.com/marianopeluso/FileSecureSuite/discussions
 - **Security:** See [SECURITY.md](SECURITY.md) for reporting vulnerabilities
 - **Changelog:** [CHANGELOG.md](CHANGELOG.md)
 
