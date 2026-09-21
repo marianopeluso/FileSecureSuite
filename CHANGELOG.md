@@ -1,8 +1,8 @@
 # Changelog
 
-All notable changes to File Secure Suite are documented here. Dates use the ISO 8601 format (YYYY-MM-DD). *(Fill in the exact release dates before publishing — placeholders below are marked `TBD`.)*
+All notable changes to File Secure Suite are documented here. Dates use the ISO 8601 format (YYYY-MM-DD).
 
-## [2.0.0] - TBD
+## [2.0.0] - 2026-09-21
 
 File Secure Suite 2.0.0 is a full rewrite: from a command-line menu tool to a native desktop GUI (PySide6), with a new authenticated container format. It replaces v1.0.5 as the current release.
 
@@ -43,7 +43,7 @@ File Secure Suite 2.0.0 is a full rewrite: from a command-line menu tool to a na
 ### Fixed
 - Numerous interface issues from internal testing: missing word-wrap on several labels, layout regressions in multi-button rows, and clipboard/audit-log edge cases
 
-## [1.0.5] - TBD (previously published)
+## [1.0.5] - 2025-12-03
 
 - Command-line, menu-driven interface
 - AES-256 password-based file and text encryption using the legacy FSS1 container
