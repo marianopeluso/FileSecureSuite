@@ -83,7 +83,7 @@ See [`requirements.txt`](requirements.txt).
 
 File Secure Suite runs on **Windows, Linux, and macOS** desktops with Python 3.9+ and a graphical environment — PySide6 is a desktop GUI framework, so it does not run on phones, tablets, or headless/embedded devices. It is distributed as Python source, plus a single-file **Windows executable** (see [Download](#download-windows)) that needs no Python installed. There is no installer: for Linux and macOS, run it from source.
 
-It needs no installation (beyond the dependencies above when running from source, or nothing at all with the Windows executable) and keeps no system-wide state: you can run it from **any folder, including a USB flash drive**, and carry it between computers. Each copy creates its own `keys`, `texts`, `files`, `backup`, and `logs` folders right beside the application files — beside the `.exe` when you use the executable (see [`DOCUMENTATION.md`](docs/DOCUMENTATION.md#14-files-folders-and-local-data)) — so if several people each run their own copy, on their own PC or from their own USB drive, their keys, encrypted files, saved text, and audit logs stay completely separate. There is no shared server, account, or central database of any kind.
+It needs no installation (beyond the dependencies above when running from source, or nothing at all with the Windows executable) and keeps no system-wide state: you can run it from **any folder, including a USB flash drive**, and carry it between computers. Each copy creates its own `keys`, `texts`, `files`, `backup`, and `logs` folders right beside the application files — beside the `.exe` when you use the executable (see [`DOCUMENTATION.md`](DOCUMENTATION.md#14-files-folders-and-local-data)) — so if several people each run their own copy, on their own PC or from their own USB drive, their keys, encrypted files, saved text, and audit logs stay completely separate. There is no shared server, account, or central database of any kind.
 
 ## Usage
 
@@ -100,16 +100,16 @@ Launch the app and choose a panel from the sidebar:
 - **AES-256-GCM** for password-based encryption, key derived via **PBKDF2-HMAC-SHA256** with 600,000 iterations and a random 16-byte salt
 - **RSA-4096 with OAEP** (SHA-256) for public-key encryption, wrapping a random AES-256 key (hybrid encryption)
 - Keys are standard **PKCS#8** (private) / **SubjectPublicKeyInfo** (public) PEM, OpenSSL-compatible
-- The authenticated **FSS2** container format (see [`FORMAT_SPECIFICATIONS.md`](docs/FORMAT_SPECIFICATIONS.md)) — decryption of legacy **FSS1** files is still supported for backward compatibility, but FSS1 is never used to encrypt new data
+- The authenticated **FSS2** container format (see [`FORMAT_SPECIFICATIONS.md`](FORMAT_SPECIFICATIONS.md)) — decryption of legacy **FSS1** files is still supported for backward compatibility, but FSS1 is never used to encrypt new data
 - Per-file size cap (1 GiB) and a dynamic available-RAM check before every operation
 - Symlinks and Windows reparse points are rejected on any path the app writes to or reads from
 - No signing, no identity verification, no key escrow, no backdoor, and no network access of any kind
 
-Full details, threat model notes, and how to report a vulnerability are in [`SECURITY.md`](SECURITY.md). For an in-depth, beginner-friendly explanation of password vs. public-key encryption, key management, the full interface panel-by-panel, and how File Secure Suite compares to OpenPGP/OpenSSL/SSH, see [`DOCUMENTATION.md`](docs/DOCUMENTATION.md).
+Full details, threat model notes, and how to report a vulnerability are in [`SECURITY.md`](SECURITY.md). For an in-depth, beginner-friendly explanation of password vs. public-key encryption, key management, the full interface panel-by-panel, and how File Secure Suite compares to OpenPGP/OpenSSL/SSH, see [`DOCUMENTATION.md`](DOCUMENTATION.md).
 
 ## File Format
 
-Encrypted output uses the `FSS2` container: a fixed binary header (magic, version, algorithm, payload type, KDF parameters) followed by the salt/nonce, an optional RSA-wrapped AES key, and the AES-256-GCM ciphertext with its authentication tag. The exact byte layout is documented in [`FORMAT_SPECIFICATIONS.md`](docs/FORMAT_SPECIFICATIONS.md).
+Encrypted output uses the `FSS2` container: a fixed binary header (magic, version, algorithm, payload type, KDF parameters) followed by the salt/nonce, an optional RSA-wrapped AES key, and the AES-256-GCM ciphertext with its authentication tag. The exact byte layout is documented in [`FORMAT_SPECIFICATIONS.md`](FORMAT_SPECIFICATIONS.md).
 
 ## A Note on Responsible Use
 
