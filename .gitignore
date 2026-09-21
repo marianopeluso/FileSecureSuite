@@ -1,0 +1,47 @@
+# --- File Secure Suite runtime data — NEVER commit these ---
+# The app creates these folders beside the application files. They can
+# contain private keys, decrypted plaintext, chat transcripts, and audit
+# metadata. Do not remove these lines.
+/keys/
+/backup/
+/texts/
+/files/
+/chat/
+/logs/
+*.pem
+*.rsa
+*.rsa.b64
+*.aes
+*.aes.b64
+encryption_audit.log
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+*_venv/
+ENV/
+
+# --- PyInstaller build output ---
+build/
+dist/
+*.spec
+# Executables and their checksums go on the GitHub Releases page only, never in the repository
+*.exe
+*.zip
+*.sha256
+*.sha256.asc
+
+# --- OS / editor cruft ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
