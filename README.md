@@ -1,317 +1,138 @@
-# FileSecureSuite v1.0.5
+# File Secure Suite
 
-Enterprise-grade file encryption with AES-256-GCM and RSA-4096.
+**File Secure Suite** is a free, open-source desktop application for encrypting files and text — with a password or with RSA-4096 public-key cryptography. It runs entirely on your machine: no accounts, no cloud, no telemetry, no network calls.
 
-![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
-![Status](https://img.shields.io/badge/status-stable-green.svg)
+> Secret is what you hide. Private is what you choose to reveal. Privacy is the power to selectively reveal oneself to the world. You don't need something to hide to need privacy.
+>
+> — Inspired by Eric Hughes, *A Cypherpunk's Manifesto*, 1993
 
----
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)
+![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)
 
-## Why FileSecureSuite?
+## Why File Secure Suite
 
-Encryption should be frictionless. Most people need to encrypt files and texts for ad-hoc secure sharing via email or chat—but existing solutions were built for different problems.
+File Secure Suite exists to protect privacy — for private conversations, sensitive documents, and personal data. It is a neutral tool, like a lock or a pen: what you do with it is entirely up to you. It is anonymous by design (a key identifies only itself, never a verified real-world identity) and it has no signing, authentication, or identity-verification features of any kind — it only encrypts and decrypts.
 
-**The Challenge:**
-Initially, we explored OpenSSL for encryption. It's mature and widely used, but it has a critical limitation: **RSA key size directly constrains file size**. Encrypting large files (beyond a few MB) with OpenSSL keys becomes impractical. **GPG** solves this but is designed around permanent key management, trust networks, and identity verification—concepts that add overhead for simpler use cases.
+## Key Features
 
-**Our Solution:**
-FileSecureSuite uses **hybrid encryption**, optimized for:
+- **File encryption**, password-based (AES-256-GCM) or public-key (RSA-4096 hybrid), with drag-and-drop batches of up to 5 files (1 GiB combined)
+- **Text / Chat mode** for encrypting messages or pasted text to copy into any chat app, with the same password or public-key options; nothing is saved unless you choose **Save text…**
+- **Key Management**: RSA-4096 key generation, password-protected private-key backup, public-key export (including as a QR code), and SHA-256 key fingerprints
+- **Audit log** of file and text operations (metadata only — filenames and outcomes, never plaintext or keys) with a live filter
+- **FSS2 authenticated container format**, plus read-only support for decrypting legacy FSS1 files from earlier releases — decrypt with the old password/key, then re-encrypt to adopt FSS2
+- Non-blocking weak-password warnings, one-shot password fields that clear themselves after use, and a self-clearing clipboard (15 seconds) after copying decrypted text
+- Cross-platform: Windows, Linux, macOS
 
-- **Throwaway keys** - Generate a key for a single conversation, then discard it. No persistent key management burden.
-- **Large file support** - Hybrid encryption (AES-256-GCM + RSA-4096) scales to any file size limited only by available RAM, not key size.
-- **OpenSSL key compatibility** - You can use OpenSSL-generated RSA keys with FileSecureSuite for encryption. However, encrypted files are in **FSS1 format** (FileSecureSuite's published standard), which requires FileSecureSuite or a compatible implementation to decrypt.
-- **Speed** - Encrypt a file in seconds, without setup complexity. Create keys on the fly.
-- **Privacy** - Keys don't linger in your system. Communicate securely without maintaining infrastructure.
-- **Simplicity** - Drag & drop encryption on Windows, intuitive workflows on all platforms. No learning curve.
-- **Archive protection** - Encrypt sensitive files at rest without needing signatures or trust networks.
+## Download (Windows)
 
-### Open Format Specification
+The easiest way to try File Secure Suite on Windows 10 or 11 (64-bit) is the ready-to-run, single-file executable: no Python and no installation needed.
 
-To ensure files encrypted today remain decryptable in the future—whether FileSecureSuite exists or not—we've published **complete encryption specifications** documenting all parameters, format details, and test vectors. This enables independent implementations in any language and guarantees long-term interoperability.
+1. Download `filesecuresuite_2_0_0.zip` from the [Releases](https://github.com/marianopeluso/FileSecureSuite/releases) page. It contains `FileSecureSuite_2_0_0.exe` and the author's GPG public key (`filesecuresuite2.0.asc`).
+2. *(Recommended)* Verify the download — see [Verifying the download](#verifying-the-download) below.
+3. Unzip it and double-click the `.exe`. The app creates its `keys`, `texts`, `files`, `backup`, and `logs` folders right beside the `.exe`, so keep it in a folder of its own (or on a USB drive).
 
-### Not Trying to Replace, Just Different
+> **The executable is not code-signed with a Windows certificate.** Windows SmartScreen or your antivirus may warn that the publisher is unknown, and executables built with PyInstaller are sometimes flagged as false positives. This is why each release ships a SHA-256 checksum signed with the author's GPG key, and why the full source code is in this repository: you can verify the download, or run the app from source and build the executable yourself.
 
-FileSecureSuite doesn't aim to be a replacement for GPG or OpenSSL. It's a purpose-built tool for a specific workflow: **quick, temporary, easy encryption for everyday file sharing and storage**. 
+### Verifying the download
 
-If you need digital signatures, long-term key infrastructure, or trusted communication networks—GPG is the right choice. If you need to securely share a document in 30 seconds without complexity—FileSecureSuite is built for that.
+Each release contains three files: `filesecuresuite_2_0_0.zip`, `filesecuresuite_2_0_0.zip.sha256` (its SHA-256 checksum), and `filesecuresuite_2_0_0.zip.sha256.asc` (a detached GPG signature of the checksum file).
 
-### Flexible Encryption for Every Scenario
+The author's public key is published in this repository as [`filesecuresuite2.0.asc`](filesecuresuite2.0.asc) — use *that* copy, not the one inside the zip, because a tampered zip could carry a tampered key. Its fingerprint is:
 
-FileSecureSuite doesn't lock you into one approach. Choose what fits your need:
+```
+0FD9 7EB8 55F7 C5BB 1048 D424 F204 94B9 FAB5 3C10
+```
 
-- **Password-only encryption** - Encrypt a file/text with a simple password using AES-256-GCM. Share the file/text and password separately. Perfect for quick, one-off exchanges.
-- **Throwaway key pairs** - Generate a temporary RSA key pair, share the public key, encrypt the file/text, then discard the key after communication. No password needed, no lingering infrastructure.
-- **Long-term key protection** - Create an RSA keypair, protect it with a strong password, and use it to encrypt your archive files. One secure key manages all your sensitive data without complexity.
+```powershell
+# 1. Check that the zip matches the published checksum (the two hashes must be identical)
+(Get-FileHash filesecuresuite_2_0_0.zip -Algorithm SHA256).Hash
+Get-Content filesecuresuite_2_0_0.zip.sha256
 
-Same tool, different modes—you decide the right security model for each situation.
+# 2. Check that the checksum file was signed by the author (requires GnuPG)
+gpg --import filesecuresuite2.0.asc
+gpg --fingerprint mariano@peluso.me                # must show the fingerprint above
+gpg --verify filesecuresuite_2_0_0.zip.sha256.asc filesecuresuite_2_0_0.zip.sha256
+```
 
-### Key Principles
+GnuPG will print "Good signature from Mariano Peluso" and, unless you have certified the key yourself, a warning that the key is not trusted — that warning is expected; what matters is that the fingerprint matches.
 
-- **User-first design** - Encryption operations should feel as natural as sharing a file
-- **Open format specification** - All encryption parameters published for future interoperability and independent implementations
-- **Cross-platform** - Seamless experience on Windows, Linux, and macOS
-- **Self-contained** - Everything you need is integrated—no external tool juggling
-- **Future-proof** - Security enhancements planned without breaking backward compatibility
-
----
-
-## Features
-
-- **AES-256-GCM Encryption** - Military-grade symmetric encryption with authentication
-- **RSA-4096 Key Exchange** - Robust asymmetric encryption for key distribution
-- **Key Management System** - Secure key backup and public key export with fingerprinting
-- **Cross-Platform** - Windows, macOS, and Linux support
-- **Secure Key Derivation** - PBKDF2 with configurable iterations and enhanced validation
-- **Interactive CLI** - User-friendly terminal interface with emoji indicators
-- **HMAC Verification** - Integrity checking for all encrypted data
-- **Multi-Environment Support** - Works on Desktop, Headless, Remote Desktop
-- **Complete Filename Preservation** - Original filenames retained during encryption
-- **Comprehensive Audit Logging** - Enterprise-grade operation tracking with compliance fields
-
----
-
-## What's New in v1.0.5
-
-✅ **Key Management System** - New submenu for secure key backup and public key export  
-✅ **Enhanced Audit Logging** - New fields for key operations and fingerprinting  
-✅ **Improved Security** - Stricter key password validation (12+ chars with complexity)  
-✅ **Better UX** - Dedicated submenus for Encrypt/Decrypt and Key Management  
-✅ **Selective Backup** - Choose which keys to backup or backup all at once  
-✅ **Optional Dependencies** - QR code and progress bars now gracefully optional  
-✅ **PBKDF2 Update** - Increased to 600,000 iterations (OpenSSL 3.0 default)  
-
-[See full changelog](CHANGELOG.md)
-
----
-
-## Quick Start
-
-### Installation
+## Quick Start (from source)
 
 ```bash
-# Windows
-python -m pip install -r requirements.txt
-python FileSecureSuite_1_0_5.py
-
-# macOS / Linux
-python3 -m pip install -r requirements.txt
-python3 FileSecureSuite_1_0_5.py
+git clone https://github.com/marianopeluso/FileSecureSuite.git
+cd FileSecureSuite
+pip install -r requirements.txt
+python FileSecureSuite_2_0_0.py
 ```
 
-### Automated Installers
+`fss_core_1_1_0.py` must stay in the same directory as `FileSecureSuite_2_0_0.py` — it is the cryptographic engine the GUI imports.
 
-**Windows:**
-```cmd
-install_filesecure_windows.bat
-```
+## Requirements (running from source)
 
-**Linux:**
-```bash
-bash install_filesecure_linux.sh
-```
+The Windows executable needs none of this. To run the Python source you need:
 
-**macOS:**
-```bash
-bash install_filesecure_macos.sh
-```
+- Python 3.9 or later
+- [PySide6](https://pypi.org/project/PySide6/) — GUI framework
+- [cryptography](https://pypi.org/project/cryptography/) — AES-GCM, RSA-OAEP, PBKDF2
+- [pyperclip](https://pypi.org/project/pyperclip/) *(optional)* — enables the self-clearing clipboard when copying decrypted text; without it, copy/paste still works manually
 
----
+See [`requirements.txt`](requirements.txt).
 
-## Requirements
+## Platform & Portability
 
-- **Python 3.8** or higher
-- **pip** (Python package manager)
-- Internet connection (for first-time installation)
+File Secure Suite runs on **Windows, Linux, and macOS** desktops with Python 3.9+ and a graphical environment — PySide6 is a desktop GUI framework, so it does not run on phones, tablets, or headless/embedded devices. It is distributed as Python source, plus a single-file **Windows executable** (see [Download](#download-windows)) that needs no Python installed. There is no installer: for Linux and macOS, run it from source.
 
-### Dependencies
-
-Core dependency (required):
-- `cryptography>=41.0.0` - Encryption primitives
-
-Optional dependencies (graceful fallback if missing):
-- `qrcode[pil]>=8.0` - QR code generation
-- `colorama>=0.4.6` - Colored terminal output
-- `pyperclip>=1.8.2` - Clipboard operations
-
-Removed dependencies (no longer required):
-- `tqdm` - Functionality maintained with native Python
-
----
+It needs no installation (beyond the dependencies above when running from source, or nothing at all with the Windows executable) and keeps no system-wide state: you can run it from **any folder, including a USB flash drive**, and carry it between computers. Each copy creates its own `keys`, `texts`, `files`, `backup`, and `logs` folders right beside the application files — beside the `.exe` when you use the executable (see [`DOCUMENTATION.md`](docs/DOCUMENTATION.md#14-files-folders-and-local-data)) — so if several people each run their own copy, on their own PC or from their own USB drive, their keys, encrypted files, saved text, and audit logs stay completely separate. There is no shared server, account, or central database of any kind.
 
 ## Usage
 
-Launch the application:
+Launch the app and choose a panel from the sidebar:
 
-```bash
-python3 FileSecureSuite_1_0_5.py
-```
-
-### Main Menu Options
-
-1. **Generate RSA-4096 Key Pair** - Create new encryption keys
-2. **Encrypt** - Secure files or text with AES-256-GCM or RSA-4096
-3. **Decrypt** - Restore encrypted files with integrity verification
-4. **Key Management** - Backup keys and export public keys
-5. **View Audit Log** - Track encryption operations for compliance
-6. **Credits** - Support information and QR code
-7. **Exit** - Close the application
-
-### Key Management Features
-
-- **Backup Keys** - Secure backup of RSA key pairs
-  - Backup all keys at once
-  - Selectively backup specific keys by number
-  
-- **Export Public Key** - Extract public key from private key
-  - Automatic fingerprint calculation
-  - Compliance audit logging
-  - Password-protected key support
-
----
-
-## Platform Support
-
-| Platform | Status | Notes |
-|----------|--------|-------|
-| Windows 10/11 | ✅ Full Support | Native terminal support |
-| Linux Desktop | ✅ Full Support | All desktop environments |
-| macOS | ✅ Full Support | Intel & Apple Silicon |
-| Kali Linux (Headless) | ✅ Full Support | SSH terminal compatible |
-| Remote Desktop | ✅ Full Support | Auto-detects environment |
-
----
+- **File** — encrypt or decrypt one or more files with a password or an RSA key pair
+- **Text** — encrypt/decrypt text or chat messages, for pasting into email, chat apps, etc.
+- **Key Generation** — create a new RSA-4096 key pair, optionally password-protected
+- **Key Management** — back up, export, and fingerprint your existing keys
+- **Audit Log** — review metadata about past encrypt/decrypt operations on this machine
 
 ## Security
 
-- Uses NIST-approved cryptographic algorithms
-- No plaintext key storage
-- Secure random salt generation
-- File permissions restricted to owner only
-- HMAC-based integrity verification
-- Cross-platform compatibility tested
-- Complete audit logging of all operations
-- Key password validation with complexity requirements
-- Exponential backoff on failed password attempts
-- Secure key fingerprinting for verification
+- **AES-256-GCM** for password-based encryption, key derived via **PBKDF2-HMAC-SHA256** with 600,000 iterations and a random 16-byte salt
+- **RSA-4096 with OAEP** (SHA-256) for public-key encryption, wrapping a random AES-256 key (hybrid encryption)
+- Keys are standard **PKCS#8** (private) / **SubjectPublicKeyInfo** (public) PEM, OpenSSL-compatible
+- The authenticated **FSS2** container format (see [`FORMAT_SPECIFICATIONS.md`](docs/FORMAT_SPECIFICATIONS.md)) — decryption of legacy **FSS1** files is still supported for backward compatibility, but FSS1 is never used to encrypt new data
+- Per-file size cap (1 GiB) and a dynamic available-RAM check before every operation
+- Symlinks and Windows reparse points are rejected on any path the app writes to or reads from
+- No signing, no identity verification, no key escrow, no backdoor, and no network access of any kind
 
-See [SECURITY.md](SECURITY.md) for detailed security information.
-
----
-
-## Installation Guide
-
-Detailed setup instructions available in:
-- [INSTALLATION_INSTRUCTIONS.md](INSTALLATION_INSTRUCTIONS.md)
-- [WINDOWS_PYTHON_INSTALLATION_GUIDE.md](WINDOWS_PYTHON_INSTALLATION_GUIDE.md)
-- [README_INSTALLERS.md](README_INSTALLERS.md)
-
----
-
-## Troubleshooting
-
-### Python Not Found (Windows)
-1. Download Python: https://www.python.org/downloads/
-2. During installation, **CHECK "Add Python to PATH"**
-3. Restart Command Prompt
-4. Try again
-
-### Python Not Found (Linux)
-```bash
-# Ubuntu/Debian
-sudo apt install python3 python3-pip python3-venv -y
-
-# Fedora
-sudo dnf install python3 python3-pip -y
-
-# Arch
-sudo pacman -S python python-pip -y
-```
-
-### pip Not Found
-```bash
-python -m pip install cryptography  # Windows
-python3 -m pip install cryptography  # Linux/macOS
-```
-
-### Encrypted Files Not Decrypting
-- Ensure correct encryption format (.aes, .rsa, or .aes.b64, .rsa.b64)
-- Verify correct password or private key
-- Check audit log for operation history
-- Use Key Management to verify key fingerprints match
-
-### Missing Optional Features
-- **No colored output?** Install colorama: `pip install colorama`
-- **No QR codes?** Install qrcode: `pip install qrcode[pil]`
-- **No clipboard?** Install pyperclip: `pip install pyperclip`
-
-All features gracefully degrade if optional dependencies are missing.
-
----
+Full details, threat model notes, and how to report a vulnerability are in [`SECURITY.md`](SECURITY.md). For an in-depth, beginner-friendly explanation of password vs. public-key encryption, key management, the full interface panel-by-panel, and how File Secure Suite compares to OpenPGP/OpenSSL/SSH, see [`DOCUMENTATION.md`](docs/DOCUMENTATION.md).
 
 ## File Format
 
-### Encrypted File Naming
-- Original filename is preserved and included in the encrypted filename
-- Format: `encrypted_<original_filename>_<timestamp>_<random>.aes|.rsa`
-- Base64 versions also supported: `.aes.b64`, `.rsa.b64`
+Encrypted output uses the `FSS2` container: a fixed binary header (magic, version, algorithm, payload type, KDF parameters) followed by the salt/nonce, an optional RSA-wrapped AES key, and the AES-256-GCM ciphertext with its authentication tag. The exact byte layout is documented in [`FORMAT_SPECIFICATIONS.md`](docs/FORMAT_SPECIFICATIONS.md).
 
-### Supported Encryption Methods
-- **AES-256-GCM** - Password-based symmetric encryption
-- **RSA-4096** - Asymmetric encryption with optional key password
-- **Hybrid Mode** - RSA key exchange with AES data encryption
+## A Note on Responsible Use
 
----
+File Secure Suite is a neutral tool: it can be used well or poorly, and that choice belongs entirely to the person using it. It exists to protect privacy, not to enable harm. Please use it responsibly and lawfully, and extend that same respect to others' privacy. As open-source software, it is provided as-is, without warranty, and its author accepts no liability for how others choose to use it.
 
 ## Contributing
 
-Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
----
+Contributions, bug reports, and suggestions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
+Released under the [MIT License](LICENSE).
 
----
+## Support the Project
 
-## Support
+If File Secure Suite is useful to you, you can support its development with a Lightning Network donation:
 
-- **Issues:** https://github.com/marianopeluso/FileSecureSuite/issues
-- **Discussions:** https://github.com/marianopeluso/FileSecureSuite/discussions
-- **Security:** See [SECURITY.md](SECURITY.md) for reporting vulnerabilities
-- **Changelog:** [CHANGELOG.md](CHANGELOG.md)
+```
+lnurl1dp68gurn8ghj7ampd3kx2ar0veekzar0wd5xjtnrdakj7tnhv4kxctttdehhwm30d3h82unvwqhk6ctjd9skummcxu6qs3rtcq
+```
 
----
+Issues and ideas: [GitHub Issues](https://github.com/marianopeluso/FileSecureSuite/issues) · [Discussions](https://github.com/marianopeluso/FileSecureSuite/discussions)
 
 ## Release History
 
-### v1.0.5 (2025-12-02)
-- ✅ Key Management System with secure backup
-- ✅ Enhanced audit logging with fingerprinting
-- ✅ Improved security with stricter password validation
-- ✅ Better user interface with submenus
-- ✅ Optional dependencies with graceful fallback
-
-### v1.0.4 (2025-11-17)
-- ✅ Fixed filename truncation during encryption
-- ✅ Improved user interface flow
-- ✅ Better batch processing support
-
-### v1.0.3 (2025-11-16)
-- ✅ ASCII QR code display improvements
-
-### v1.0.2 (2025-11-14)
-- ✅ Cross-platform QR viewer fixes
-
-### v1.0.1 (2025-11-13)
-- ✅ Line ending and encoding fixes
-
-### v1.0.0 (2025-11-13)
-- ✅ Initial release with core encryption features
-
----
-
-**FileSecureSuite v1.0.5** - Enterprise encryption for everyone  
-*Last Updated: 2025-12-02*
+See [`CHANGELOG.md`](CHANGELOG.md).

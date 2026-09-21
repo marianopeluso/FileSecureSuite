@@ -1,16 +1,8 @@
-# FileSecureSuite v1.0.5 - Python Dependencies
+# File Secure Suite — runtime dependencies
+cryptography
+PySide6
 
-# REQUIRED DEPENDENCIES
-# These are essential for core encryption/decryption functionality
-cryptography>=41.0.0
-
-# OPTIONAL DEPENDENCIES
-# These enhance features but are not required
-# The application gracefully degrades if these are not installed
-colorama>=0.4.6        # Terminal colors and styling (especially useful on Windows)
-pyperclip>=1.8.2       # Clipboard copy/paste operations for sharing encrypted data
-qrcode[pil]>=8.0       # QR code generation for key visualization
-Pillow>=10.0.0         # Image processing library (required by qrcode[pil])
-
-# PYTHON VERSION REQUIREMENT
-# Requires: Python 3.8 or higher
+# Optional: enables the clipboard to self-clear automatically after copying
+# decrypted text. Without it, the app still works — copy/paste just has to
+# be done manually and won't clear itself.
+# pyperclip
