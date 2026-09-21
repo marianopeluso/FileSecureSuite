@@ -109,7 +109,7 @@ FSS1 predates the fixed-width header above and is no longer produced by File Sec
 
 In both FSS1 variants, the plaintext is `<filename> + 0x00 + <content>` and integrity is checked by comparing a plain SHA-256 hash of the decrypted plaintext against the stored digest — **not** as an AEAD associated-data mechanism (FSS1's AES-GCM call carries no associated data). FSS2 supersedes this with header/salt/nonce/key authentication built directly into the AEAD call.
 
-**Migrating a file from FSS1 to FSS2:** there is no direct binary conversion between the two formats. A file encrypted as FSS1 must be decrypted with its original password or private key, and the resulting plaintext then re-encrypted, which produces a new FSS2 container. See [`GUIDE.md`](DOCUMENTATION.md#131-migrating-an-old-fss1-file-to-fss2).
+**Migrating a file from FSS1 to FSS2:** there is no direct binary conversion between the two formats. A file encrypted as FSS1 must be decrypted with its original password or private key, and the resulting plaintext then re-encrypted, which produces a new FSS2 container. See [`DOCUMENTATION.md`](DOCUMENTATION.md#131-migrating-an-old-fss1-file-to-fss2).
 
 ## Key file formats (unrelated to the container, but required to use it)
 
