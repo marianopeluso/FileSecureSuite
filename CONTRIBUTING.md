@@ -11,7 +11,7 @@ Thanks for your interest in contributing. This is a small, single-maintainer ope
 
 Please include:
 
-- Your OS and Python version, and the app version (shown at the bottom of the sidebar, e.g. `GUI 2.0.0 / Core 1.1.0`)
+- Your OS and Python version, and the app version (shown at the bottom of the sidebar, e.g. `GUI 2.0.1 / Core 1.1.1`)
 - Exact steps to reproduce
 - What you expected vs. what happened
 - Any error message or traceback (please redact filenames or paths if they're sensitive — never share a password, a private key, or its file)
@@ -26,17 +26,17 @@ Open an issue describing the use case, not just the mechanism — what problem i
 git clone https://github.com/marianopeluso/FileSecureSuite.git
 cd FileSecureSuite
 pip install -r requirements.txt
-python FileSecureSuite_2_0_0.py
+python FileSecureSuite_2_0_1.py
 ```
 
-`fss_core_1_1_0.py` (the cryptographic engine) must stay in the same directory as the GUI file — the GUI imports it directly by module name.
+`fss_core_1_1_1.py` (the cryptographic engine) must stay in the same directory as the GUI file — the GUI imports it directly by module name.
 
 ## Code guidelines
 
 - **Keep `fss_core_*.py` UI-free.** The core module must contain no GUI imports and no user-interface code — it is the security-critical surface, kept small and auditable on its own.
 - **Never weaken a security default silently.** Any change to cryptographic parameters (KDF iterations, key sizes, algorithms, size limits) must be called out explicitly in the pull request description and, once merged, in `CHANGELOG.md` and (if relevant) `FORMAT_SPECIFICATIONS.md`.
 - **Preserve backward-compatible decryption.** Existing FSS2 (and legacy FSS1) files must remain decryptable; if a change affects the container format, it must introduce a new, explicitly versioned format rather than altering FSS2 in place.
-- Match the existing style: plain, explicit Python, no exotic dependencies, comments that explain *why* a security-relevant check exists (see `fss_core_1_1_0.py` for the tone to match).
+- Match the existing style: plain, explicit Python, no exotic dependencies, comments that explain *why* a security-relevant check exists (see `fss_core_1_1_1.py` for the tone to match).
 - Run the module you changed through `python -m py_compile <file>` before submitting, and manually verify: at minimum, one encrypt/decrypt round trip per mode you touched (password and RSA), across a fresh RSA key pair if you touched key handling.
 
 ## Building the Windows executable
@@ -45,10 +45,10 @@ Releases use a single-file executable built with PyInstaller. In a clean virtual
 
 ```
 pip install pyinstaller
-pyinstaller --onefile --windowed FileSecureSuite_2_0_0.py
+pyinstaller --onefile --windowed FileSecureSuite_2_0_1.py
 ```
 
-`fss_core_1_1_0.py` is picked up automatically because the GUI imports it; keep both files in the same folder. The result is `dist\FileSecureSuite_2_0_0.exe`. Do not commit build output (`build/`, `dist/`, `*.spec`, `*.exe`): executables go only on the Releases page (zipped together with the public key), with a SHA-256 checksum and GPG signature of the zip.
+`fss_core_1_1_1.py` is picked up automatically because the GUI imports it; keep both files in the same folder. The result is `dist\FileSecureSuite_2_0_1.exe`. Do not commit build output (`build/`, `dist/`, `*.spec`, `*.exe`): executables go only on the Releases page (zipped together with the public key), with a SHA-256 checksum and GPG signature of the zip.
 
 ## Versioning
 

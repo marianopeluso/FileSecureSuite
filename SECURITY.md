@@ -24,6 +24,7 @@ File Secure Suite uses:
 - **AES-256-GCM** for authenticated payload encryption
 - **RSA-4096 with OAEP** (SHA-256, MGF1-SHA-256) for wrapping a random AES-256 key in public-key (hybrid) mode
 - **PBKDF2-HMAC-SHA-256** with 600,000 iterations for deriving an AES key from a password
+- **Password-protected private keys**: PKCS#8 PEM encrypted with PBES2 (PBKDF2-HMAC-SHA-256, 600,000 iterations, AES-256-CBC) since 2.0.1. Keys created with 2.0.0 used the `cryptography` library default of 2,048 iterations and should be re-protected (see Recommended Practices)
 - **PKCS#8** (private) and **SubjectPublicKeyInfo** (public) PEM key encodings, OpenSSL-compatible
 - The authenticated **FSS2** container format; legacy **FSS1** containers can still be decrypted for backward compatibility but are never produced by new encryption
 
@@ -61,6 +62,8 @@ Both encryption modes provide authenticated encryption: a modified, incomplete, 
 2. Generate a separate RSA key pair per identity, project, or conversation rather than reusing one everywhere.
 3. Verify a correspondent's public-key **fingerprint** (full SHA-256, shown in Key Management) through a separate trusted channel before trusting it.
 4. Keep at least one verified, offline backup of every private key you still need, stored **separately** from its password.
+   If the key was created with 2.0.0, re-protect it with the stronger 2.0.1 parameters (same key and fingerprint; OpenSSL asks for the old and the new password):
+   `openssl pkcs8 -topk8 -v2 aes-256-cbc -v2prf hmacWithSHA256 -iter 600000 -in old_private.pem -out new_private.pem`
 5. Treat decrypted files, saved text files, clipboard contents, and audit-log metadata according to their real sensitivity — none of these are encrypted at rest.
 6. Never send a private key to someone who only needs to encrypt data for you — they only need your public key.
 

@@ -28,7 +28,7 @@ File Secure Suite exists to protect privacy — for private conversations, sensi
 
 The easiest way to try File Secure Suite on Windows 10 or 11 (64-bit) is the ready-to-run, single-file executable: no Python and no installation needed.
 
-1. Download `filesecuresuite_2_0_0.zip` from the [Releases](https://github.com/marianopeluso/FileSecureSuite/releases) page. It contains `FileSecureSuite_2_0_0.exe` and the author's GPG public key (`filesecuresuite2.0.asc`).
+1. Download `filesecuresuite_2_0_1.zip` from the [Releases](https://github.com/marianopeluso/FileSecureSuite/releases) page. It contains `FileSecureSuite_2_0_1.exe` and the author's GPG public key (`filesecuresuite2.0.asc`).
 2. *(Recommended)* Verify the download — see [Verifying the download](#verifying-the-download) below.
 3. Unzip it and double-click the `.exe`. The app creates its `keys`, `texts`, `files`, `backup`, and `logs` folders right beside the `.exe`, so keep it in a folder of its own (or on a USB drive).
 
@@ -36,7 +36,7 @@ The easiest way to try File Secure Suite on Windows 10 or 11 (64-bit) is the rea
 
 ### Verifying the download
 
-Each release contains three files: `filesecuresuite_2_0_0.zip`, `filesecuresuite_2_0_0.zip.sha256` (its SHA-256 checksum), and `filesecuresuite_2_0_0.zip.sha256.asc` (a detached GPG signature of the checksum file).
+Each release contains three files: `filesecuresuite_2_0_1.zip`, `filesecuresuite_2_0_1.zip.sha256` (its SHA-256 checksum), and `filesecuresuite_2_0_1.zip.sha256.asc` (a detached GPG signature of the checksum file).
 
 The author's public key is published in this repository as [`filesecuresuite2.0.asc`](filesecuresuite2.0.asc) — use *that* copy, not the one inside the zip, because a tampered zip could carry a tampered key. Its fingerprint is:
 
@@ -46,13 +46,13 @@ The author's public key is published in this repository as [`filesecuresuite2.0.
 
 ```powershell
 # 1. Check that the zip matches the published checksum (the two hashes must be identical)
-(Get-FileHash filesecuresuite_2_0_0.zip -Algorithm SHA256).Hash
-Get-Content filesecuresuite_2_0_0.zip.sha256
+(Get-FileHash filesecuresuite_2_0_1.zip -Algorithm SHA256).Hash
+Get-Content filesecuresuite_2_0_1.zip.sha256
 
 # 2. Check that the checksum file was signed by the author (requires GnuPG)
 gpg --import filesecuresuite2.0.asc
 gpg --fingerprint mariano@peluso.me                # must show the fingerprint above
-gpg --verify filesecuresuite_2_0_0.zip.sha256.asc filesecuresuite_2_0_0.zip.sha256
+gpg --verify filesecuresuite_2_0_1.zip.sha256.asc filesecuresuite_2_0_1.zip.sha256
 ```
 
 GnuPG will print "Good signature from Mariano Peluso" and, unless you have certified the key yourself, a warning that the key is not trusted — that warning is expected; what matters is that the fingerprint matches.
@@ -63,10 +63,10 @@ GnuPG will print "Good signature from Mariano Peluso" and, unless you have certi
 git clone https://github.com/marianopeluso/FileSecureSuite.git
 cd FileSecureSuite
 pip install -r requirements.txt
-python FileSecureSuite_2_0_0.py
+python FileSecureSuite_2_0_1.py
 ```
 
-`fss_core_1_1_0.py` must stay in the same directory as `FileSecureSuite_2_0_0.py` — it is the cryptographic engine the GUI imports.
+`fss_core_1_1_1.py` must stay in the same directory as `FileSecureSuite_2_0_1.py` — it is the cryptographic engine the GUI imports.
 
 ## Requirements (running from source)
 
@@ -100,6 +100,7 @@ Launch the app and choose a panel from the sidebar:
 - **AES-256-GCM** for password-based encryption, key derived via **PBKDF2-HMAC-SHA256** with 600,000 iterations and a random 16-byte salt
 - **RSA-4096 with OAEP** (SHA-256) for public-key encryption, wrapping a random AES-256 key (hybrid encryption)
 - Keys are standard **PKCS#8** (private) / **SubjectPublicKeyInfo** (public) PEM, OpenSSL-compatible
+- Password-protected private keys use **PBKDF2-HMAC-SHA256 with 600,000 iterations** and AES-256-CBC (since 2.0.1; keys created with 2.0.0 used 2,048 iterations — see [`DOCUMENTATION.md`](DOCUMENTATION.md#93-password-protecting-the-private-key) to re-protect them)
 - The authenticated **FSS2** container format (see [`FORMAT_SPECIFICATIONS.md`](FORMAT_SPECIFICATIONS.md)) — decryption of legacy **FSS1** files is still supported for backward compatibility, but FSS1 is never used to encrypt new data
 - Per-file size cap (1 GiB) and a dynamic available-RAM check before every operation
 - Symlinks and Windows reparse points are rejected on any path the app writes to or reads from

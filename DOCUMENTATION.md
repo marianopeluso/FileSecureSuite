@@ -1,6 +1,6 @@
 # File Secure Suite — Documentation
 
-**Applies to:** File Secure Suite GUI 2.0.0 and Core 1.1.0
+**Applies to:** File Secure Suite GUI 2.0.1 and Core 1.1.1
 
 This document is the complete reference for File Secure Suite: why it exists, how its interface works panel by panel, how its cryptography works, and how it compares to other tools. For a short project overview and installation steps, see [`README.md`](README.md). For the exact byte-level container format, see [`FORMAT_SPECIFICATIONS.md`](FORMAT_SPECIFICATIONS.md). For the security policy and vulnerability reporting, see [`SECURITY.md`](SECURITY.md).
 
@@ -482,6 +482,16 @@ If an attacker steals an encrypted private-key file, the key password creates an
 
 For private-key protection, the suite requires 12–128 characters with at least one uppercase letter, one lowercase letter, one digit, and one supported special character.
 
+Since version 2.0.1 a protected private key is written as standard PKCS#8 "ENCRYPTED PRIVATE KEY" using PBES2 with **PBKDF2-HMAC-SHA-256 at 600,000 iterations** and AES-256-CBC — the same work factor used for password-encrypted files and texts. Version 2.0.0 left these parameters to the `cryptography` library, which uses only 2,048 iterations, so a stolen 2.0.0 key file is much cheaper to attack by password guessing.
+
+Keys created with 2.0.0 keep working unchanged. To give one the stronger protection without changing the key or its fingerprint, re-encrypt it with OpenSSL (it asks for the current password, then for the new one):
+
+```
+openssl pkcs8 -topk8 -v2 aes-256-cbc -v2prf hmacWithSHA256 -iter 600000 -in old_private.pem -out new_private.pem
+```
+
+Check that the new file opens in File Secure Suite (for example with *Export public key from private key*, which must show the same fingerprint) before deleting the old file.
+
 ### 9.4 Keys Loaded in the Application
 
 Key creation saves the generated pair to disk but does not automatically place it into a permanent key list. In the Text and File panels, a loaded public or private key remains available to that panel until it is replaced, cleared, or the application closes.
@@ -648,7 +658,7 @@ Length and randomness matter more than merely satisfying composition rules. A pa
 
 #### Quantum-Computing Limitation
 
-RSA-4096 is not post-quantum encryption. A sufficiently capable fault-tolerant quantum computer running an appropriate algorithm could make today's RSA unsafe. File Secure Suite (Core 1.1.0) does not implement a post-quantum key-encapsulation method. Data that must remain confidential for many years should account for "harvest now, decrypt later" risk and use a reviewed post-quantum or hybrid migration strategy.
+RSA-4096 is not post-quantum encryption. A sufficiently capable fault-tolerant quantum computer running an appropriate algorithm could make today's RSA unsafe. File Secure Suite (Core 1.1.1) does not implement a post-quantum key-encapsulation method. Data that must remain confidential for many years should account for "harvest now, decrypt later" risk and use a reviewed post-quantum or hybrid migration strategy.
 
 AES-256 is generally given a larger margin against generic quantum search than AES-128, but that does not make the overall RSA/AES mode post-quantum: RSA remains the public-key component protecting the AES key.
 

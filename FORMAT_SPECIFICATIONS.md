@@ -1,6 +1,6 @@
 # File Secure Suite — Container Format Specification
 
-This document describes the exact byte layout of File Secure Suite's encrypted containers, as implemented in `fss_core_1_1_0.py`. It covers the current **FSS2** format and the **legacy FSS1** format (read-only, kept for backward compatibility).
+This document describes the exact byte layout of File Secure Suite's encrypted containers, as implemented in `fss_core_1_1_1.py`. It covers the current **FSS2** format and the **legacy FSS1** format (read-only, kept for backward compatibility).
 
 All multi-byte integers are **big-endian**. A container may be stored as raw binary bytes (e.g. `.aes`, `.rsa` files) or as Base64 text with the raw bytes encoded (e.g. `.aes.b64`, `.rsa.b64`, or pasted Text-mode output); Base64 input has all whitespace stripped before decoding.
 
@@ -114,5 +114,5 @@ In both FSS1 variants, the plaintext is `<filename> + 0x00 + <content>` and inte
 ## Key file formats (unrelated to the container, but required to use it)
 
 - Public key: PEM, `SubjectPublicKeyInfo`, RSA, 4096–8192 bits
-- Private key: PEM, `PKCS#8`, RSA, 4096–8192 bits, optionally encrypted with a password (`BestAvailableEncryption`)
+- Private key: PEM, `PKCS#8`, RSA, 4096–8192 bits, optionally encrypted with a password. Since 2.0.1 (Core 1.1.1) new protected keys use `ENCRYPTED PRIVATE KEY` with PBES2: PBKDF2-HMAC-SHA256, 600,000 iterations, 16-byte salt, AES-256-CBC with a 16-byte IV. Keys created by 2.0.0 used `cryptography`'s `BestAvailableEncryption` (PBES2, PBKDF2-HMAC-SHA256, 2,048 iterations, AES-256-CBC); both are read normally.
 - Key fingerprint: SHA-256 of the DER-encoded `SubjectPublicKeyInfo` of the public half — identical whether computed from the public key file or derived from the matching private key

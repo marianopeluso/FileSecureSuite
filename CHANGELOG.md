@@ -2,6 +2,18 @@
 
 All notable changes to File Secure Suite are documented here. Dates use the ISO 8601 format (YYYY-MM-DD).
 
+## [2.0.1] - 2026-10-04
+
+Security hardening release. No change to the encrypted file and text formats: everything encrypted with 2.0.0 opens with 2.0.1 and vice versa.
+
+### Security
+- Password-protected private keys are now written as PKCS#8 with **PBES2, PBKDF2-HMAC-SHA256 at 600,000 iterations and AES-256-CBC** — the same work factor FSS already used for password-encrypted files and texts. In 2.0.0 the protection parameters were chosen by the `cryptography` library (`BestAvailableEncryption`), which uses only 2,048 PBKDF2 iterations, making offline guessing of a stolen key file's password much cheaper.
+- Keys created with 2.0.0 keep working unchanged; they keep their original (2,048-iteration) protection until they are re-encrypted (see `DOCUMENTATION.md`, section 9.3).
+
+### Changed
+- Core engine updated to `fss_core_1_1_1.py` (Core 1.1.1); GUI file renamed to `FileSecureSuite_2_0_1.py` (GUI 2.0.1). No interface or behaviour changes besides the key protection above.
+- The new key files remain standard and OpenSSL-compatible (`openssl pkey` reads them with the key password).
+
 ## [2.0.0] - 2026-09-21
 
 File Secure Suite 2.0.0 is a full rewrite: from a command-line menu tool to a native desktop GUI (PySide6), with a new authenticated container format. It replaces v1.0.5 as the current release.
